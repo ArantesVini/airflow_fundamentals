@@ -89,9 +89,7 @@ Using Docker is undoubtedly the easiest way, but if you want to do that manually
 
 ### 3 -> System dependecies (For linux users)
 
-    ```
-
-sudo apt-get install -y --no-install-recommends \
+`sudo apt-get install -y --no-install-recommends \
  freetds-bin \
  krb5-user \
  ldap-utils \
@@ -103,22 +101,14 @@ sudo apt-get install -y --no-install-recommends \
  lsb-release \
  sasl2-bin \
  sqlite3 \
- unixodbc
-
-```
+ unixodbc`
 
 ### 4 -> Installing Apache Airflow
 
 With pip install apache-airflow you will got a lot of a dependencies so is hard **recomended** to add a **constraint file**:
-
-```
-
-export AIRFLOW_VERSION=2.5.1
+`export AIRFLOW_VERSION=2.5.1
 export PYTHON_VERSION=3.8
-pip install apache-airflow==${AIRFLOW_VERSION} --constraint https://raw.githubusercontent.com/apache/airflow/constraints-${AIRFLOW_VERSION}/constraints-${PYTHON_VERSION}.txt
-
-```
-
+pip install apache-airflow==${AIRFLOW_VERSION} --constraint https://raw.githubusercontent.com/apache/airflow/constraints-${AIRFLOW_VERSION}/constraints-${PYTHON_VERSION}.txt`
 At this point, you already got Airflow installed, but to run it you must intialized first, there are two steps:
 
 ### 1: Generating the files and folders needed by Airflow (logs/, airflow.cfg, unitests.cfg etc.);
@@ -128,15 +118,12 @@ By default, the files and folders are generated in the folder ~/airflow
 You can modify this behavior by setting the AIRFLOW_HOME environment variable.
 
 For example, to initialize airflow in the folder /opt, export the following environment variable:
-
 `AIRFLOW_HOME=/opt/airflow`
 
 ### 2: nitializing the metadata database (SQLite by default)
 
 Once you're good with your Airflow home, initialize Airflow with:
-
 `airflow db init`
-
 Not you can run it!
 
 ## 1.8 - Extras and Providers
@@ -202,6 +189,7 @@ With the **Toggle** you define when your DAG is ready to be scheduled or not. If
 Also in the UI, you can check the **Owner**, **Last Runs status**, **Schedule**, **Last Run info**, **Recent Tasks**, **Acions** where you can Trigger manually your dag ( The Toggle must be on ), refresh and **delete** your Dag ( this button don't remove the dag file, just all the metadata related to your Dag ), and the **Links** to acess other views, for example the **GRAPH VIEW** the **TREE VIEW**, **GANTT VIEW** and the **CODE VIEW**
 
 ## 2.3 - Tree View
+
 **The history and current DAG view** along with the status of the task, you can quick spot a error in your tasks here, useful to spot a dag running late or error in your tasks
 
 ## 2.4 - Graph View
@@ -210,131 +198,59 @@ Perfect to check the dependencies of you data prepararing and the status of the 
 You also can see all the operators that are used. Also there is a auto-refresh button to see the last status of your tasks!
 
 ## 2.5 - Gantt View
+
 The Gannt View **alows you to analyze taks duration**
 as well all overlaps and bottlenecks on specific tasks. You can also use it to check if your tasks are **well running in parallel**. Larger the rectangle is the longer to complete the task! So, use the Gantt view to check **if your tasks are running in parallel** and if there is **any bottleneck in you diagrams**.
 
 ## 2.6 - Interacting with Tasks
+
 By clicking in a task in nay of the views will appear the options to get **instance details, rendered button, logs and etc** and you can also run manually your tasks **if in the celery or kubernets executor**, **clear your task** after restart or retry a failured task.
 
 ## 2.7 - The Commands to Know
+
 Another way to interact with airflow is by the **Command Line Interface, CLI** is extremly usefull to execute commands that are not avaliable in the UI or if you don't get acesss to the UI by some reason.
 The main commands are:
- By this you are inside the container of the component in the bash
-```
-
-docker ps
-docker exec -it {container id}/bin/bash
-
-```
-To initialize the database of the airflow, you **must** enter this command first to also generate the files and folders needed by Airflow!
-`airflow db init`
-
+By this you are inside the container of the component in the bash
+`docker ps
+docker exec -it {container id}/bin/bash`
+To initialize the database of the airflow, you **must** enter this command first to also generate the files and folders needed by Airflow!`airflow db init`
 If there is a new version of Airflow:
-
-```
-
-airflow db upgrade
-
-```
-
+`airflow db upgrade`
 Never use that in production, it removes **everything** in the database!:
-
-```
-
-airflow db reset
-
-```
-
+`airflow db reset`
 To start the webserver UI:
-
-```
-
-airflow webserver
-
-```
-
+`airflow webserver`
 To start the scheduler:
-
-```
-
-airflow webserver
-
-```
-
+`airflow webserver`
 To start a celery worker, in order to indicate that a machine can be used by airflow to execute tasks:
-
-```
-
-airflow celery worker
-
-```
-
+`airflow celery worker`
 To pause/unpause dags, obviusly, if you to start or stop schedulling your dag:
-```
-
-airflow dags pause / unpause
-
-```
-
+`airflow dags pause / unpause`
 To trigger a dag, if you don't have acess to the UI:
-```
-
-airflow dags trigger
-
-```
+`airflow dags trigger`
 you can also use **-e** to execute in a specific date
 
-
 To see all your dags list
-```
-
-airflow dags list
-
-```
-
+`airflow dags list`
 To list the tasks of a specific DAG:
-
-```
-
-airflow tasks list {dag_id}
-
-```
-
-
-```
-
-```
-
-Use **every** time you add a new task into a DAG, to before push any DAGs in production you know if they really work
-```
-
-airflow tasks test {dag_id} {dag_id} {execution_date}
-
-```
-
-
-To rerun past DAGruns,
-```
-
-airflow dags backfill -s {start_date} -e {end_date} --reset_dagruns (dag_id)
-
-```
-
+`airflow tasks list {dag_id}`
+Use **every** time you add a new task into a DAG, to before push any DAGs in production you know if they really work`airflow tasks test {dag_id} {dag_id} {execution_date}`To rerun past DAGruns,`airflow dags backfill -s {start_date} -e {end_date} --reset_dagruns (dag_id)`
 
 ## 2.8 The REST API
 
 **Stable** REST API, you can do all CRUD in this API to fully interact into DAG e DAGruns.
 In the doc there is a full manual to check about the implementation of the API
-*Actually you cannot do the D, delete the DAG from the API*
+_Actually you cannot do the D, delete the DAG from the API_
 With this you can build new tools with Airflow!
-
-
 
 # 3 - DAGs and Tasks
 
 ## 3.1 - DAG Skeleton
 
 ## 3.2 - Demystifing DAG Schedulling
+
+Main parameters is
+**start_date** define the date of your dag starts to be scheduled
 
 ## 3.3 - Playing with the start_date
 
@@ -355,4 +271,5 @@ With this you can build new tools with Airflow!
 ## 3.11 - Exchanging Data
 
 ## 3.12 - Ops... We got a failure
-```
+
+`
