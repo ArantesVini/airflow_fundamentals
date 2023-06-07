@@ -250,11 +250,30 @@ With this you can build new tools with Airflow!
 ## 3.2 - Demystifing DAG Schedulling
 
 Main parameters is
-**start_date** define the date of your dag starts to be scheduled
+**start_date** define the date of your dag starts to be scheduled;
+**schedule_interval** defines the frequency of the your dag will be triggered;
+_Obs: your DAG is effectively triggered once the start_date **plus** the schedule interval is elapsed_
+
+**Example**:
+`In example if your start_date is like 01/01/2023 at 00:00 and your schedule_interval is 10 minutes, the first run will be 01/01/2023 at 00:10, but the **execution_date** is the first time, 00:00, after THIS 00:10 will be the **new start_date**, and after 10 minutes, at 00:20 the second DAGrun is created and runnign, and after it completes, the execution date of that DAGrun will be **00:10**`
+
+**end_date** the date that wich your DAG won't be scheduled more.
 
 ## 3.3 - Playing with the start_date
 
+By deffining the start_date dirrectly in your DAG object;
+You can have different starts_date between your DAG and the tasks, but, actually, **there is no use case in that**, never do that.
+
+** BY DEFAULT** all dates in Airlofw **Are stored in UTC**, and this is the best pratice, always store your dates in **UTC** to avoid problemns with timezone. If you want to do this in your current timezone you must put as UTC in DAG code.
+
+You can also set a start*date in the future. But if this in the past, by default Airflow **will run all the non trigger DAGruns** between the current date and start date. *Be carefully with that!\*
+
+_NEVER_ Define the start_date dinamically, like datetime.now(), cause every time the data pipeline is evalueted, the date will be modified!
+
 ## 3.4 - Playing with the schedule_interval
+
+Your value of schedule interval can be a cron object **or** a timedelt object. By default this value is 24h. you can use _crontab.guru_ to check cron string expressions.
+Time delts is best for days and weeks in general. You can also pass the value None to schedule_interval, doing this, you DAG will **never** be triggerd, this is really useful when you just want to manual / by API run you DAG!
 
 ## 3.5 - Backfilling and Catchup
 
