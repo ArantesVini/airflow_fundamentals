@@ -89,19 +89,19 @@ Using Docker is undoubtedly the easiest way, but if you want to do that manually
 
 ### 3 -> System dependecies (For linux users)
 
-`sudo apt-get install -y --no-install-recommends \
- freetds-bin \
- krb5-user \
- ldap-utils \
- libffi6 \
- libsasl2-2 \
- libsasl2-modules \
- libssl1.1 \
- locales \
- lsb-release \
- sasl2-bin \
- sqlite3 \
- unixodbc`
+    sudo apt-get install -y --no-install-recommends \
+    freetds-bin \
+    krb5-user \
+    ldap-utils \
+    libffi6 \
+    libsasl2-2 \
+    libsasl2-modules \
+    libssl1.1 \
+    locales \
+    lsb-release \
+    sasl2-bin \
+    sqlite3 \
+    unixodbc
 
 ### 4 -> Installing Apache Airflow
 
@@ -280,12 +280,10 @@ Time delts is best for days and weeks in general. You can also pass the value No
 **Backfilling** allows you to run a rerun past non triggered or arlready triggered DAGruns;
 Ex: You made a mistkaed, you pause you DAG for five days, as soon as you fidex your issued, you want to resume you DAG, but in this period of your time you have non triggered DAG, so this DAGruns will be automatically triggered by AIrflow. You specify that with the parameter **catchup**, cathcup is _true by default_
 
-    ```
     with DAG(dag_id='simple_dag', start_date=days_ago(3),
             schedule_interval='@daily',
             catchup=True) as dag:
         task_1 = DummyOperator(task_id='task_1')
-    ```
 
 With this example DAG, one day after the start_date day will be the first runnig, by this, with catchup on True, **the DAG will got 3 runs.**
 But if sou set catchup no **false**, **only the latest DAGruns will be automatically triggered by the scheduler**.
