@@ -311,6 +311,18 @@ You can acess the context of your DAG using `**kwargs`on the python function. Th
 
 ## 3.8 - Puttin your DAG on hold
 
+Sometimes you have to wait a specific file to land at a specific location before moving to the next task.
+In airflow you can use the **File sensor**, a special kind of operator that wait something to happen before moving to the next task.
+You import the sensor from `airflow.sensors.filesystem`then you set a specific parameter on you FileSensor task `fs_conn_id.
+This fs_conn_id you create in the UI. Every time you handle with a outside system, you must create a connection there, that will be used in the operator.
+
+**For example, if you want to interact with Presto** that doens't exist by default in Airflow, so you **must install the provider Presto** in order to get the connection type!
+The **Extra** field is really important, like, if you want to connect into the AWS, is in the Extra field that you have to indicate an **acess key and sectret key!**, but also there is others ways to do that. **By default, what you put in Extra field is not hidden! Not secureted and you can see it in the UI**. The extra field expect a **JSON** value.
+In the conn type file, the extra field expects the **folder where is the file exists**.
+Even if the Extra field isn't secret, by default, both **Extra and password fields are encrypted** in the airflow db.
+
+You can also changes the time that takes to check by changing the `poke_interval`, the default is 30 seconds.
+
 ## 3.9 - Executing Bash Commands
 
 ## 3.10 - Define the path!
