@@ -295,7 +295,19 @@ But with the CLI you cna also do the backfill by `airflows dags backfill`, even 
 
 ## 3.6 - Focus on Operators
 
+A operator is a **task**, as soon you instantiate a operator in your DAG, will be a task.
+If you have two tasks, like extracting data and cleaning data, **don't** put both on the same operator.
+If cleaning data fails you will need to retry **both the tasks** as they are in the same operator. **one operator one task**.
+
+To avoide reapeat your tasks you can set default arguments, applied to all of your operators. To do thhis you **create a dictionary outside the DAG** then into the dag parameters, set this dict to the `default_args=`
+If you set a parameter in your task different that the default_args, the tassk parameter will have pioroity.
+
 ## 3.7 - Executing Python Functions
+
+The most commom used operator in airflow!
+`from airflow.operators.dummy import DummyOperator`
+then you just create you task operator and use the `python_callable=` to start.
+You can acess the context of your DAG using `**kwargs`on the python function. This return a dictionary with all your DAG info. But you can also pass directly args from the DAG dict, like "ds" from the start_date. To pass your own params, use the `op_kwargs=` as a dict of params.
 
 ## 3.8 - Puttin your DAG on hold
 
