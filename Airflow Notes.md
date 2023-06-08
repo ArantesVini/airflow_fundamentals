@@ -280,12 +280,12 @@ Time delts is best for days and weeks in general. You can also pass the value No
 **Backfilling** allows you to run a rerun past non triggered or arlready triggered DAGruns;
 Ex: You made a mistkaed, you pause you DAG for five days, as soon as you fidex your issued, you want to resume you DAG, but in this period of your time you have non triggered DAG, so this DAGruns will be automatically triggered by AIrflow. You specify that with the parameter **catchup**, cathcup is _true by default_
 
-```
-with DAG(dag_id='simple_dag', start_date=days_ago(3),
-         schedule_interval='@daily',
-         catchup=True) as dag:
-    task_1 = DummyOperator(task_id='task_1')
-```
+    ```
+    with DAG(dag_id='simple_dag', start_date=days_ago(3),
+            schedule_interval='@daily',
+            catchup=True) as dag:
+        task_1 = DummyOperator(task_id='task_1')
+    ```
 
 With this example DAG, one day after the start_date day will be the first runnig, by this, with catchup on True, **the DAG will got 3 runs.**
 But if sou set catchup no **false**, **only the latest DAGruns will be automatically triggered by the scheduler**.
