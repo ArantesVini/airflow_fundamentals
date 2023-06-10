@@ -331,8 +331,38 @@ Bash operator is really simple, just need the **task_id** and the **bash_command
 
 To define depedencies you can use two methods:
 **- set_upstream** and;
-**- set_downstreaM**.
+**- set_downstream**.
+I can just define **set_upstream** with a portuguese expression
+Os últimos serao os primeiros!
+Or the last ones will be the first ones...
+So if we define `c.set_upstream(b)` and `b.set_upstream(a)` the path will be **a->b->c**.
+
+For the set downstream is simple, as we set is the path to if `a.set_downstream(b)` and `b.set_dowstream(c)` the path will be **a->b->c**.
+
+The way to read that is basicallly:
+`execute_before.set_downstream(execute_after)`;
+`execute_after.set_upstream(execute_before)`.
+
+But, this ones is nome **commonly used in Airflow**
+The better way to do that is by left and right bitshift operators, you can just do:
+`a >> b >> c`
+Much cleaner and clearer.
+`>>` is for set_downstream , or `execute_before >> execute_after`;
+and `<<` is for set_upstream, `execute_after << execute_before`.
+
+**What if we have two tasks that we want to execute in the same time?**
+
+Simple put the tasks into a list, if we want to execute B and C right after A:
+`a >> [b, c]`
+
+Also, you can use `from airflow.models.baseoperator import chain` to set a chain to the same as the previous example: `chain(a, [b, c])`
+
+To create **cross dependencies** there is a special function call `cross_downdstream`:
+If you try to create a cross dependecy with bitshift operator, you will got the error `unsupported operand types for list and list`. **You can't create a depedency between two list of tasks!**
 
 ## 3.11 - Exchanging Data
+
+**XComs** is the way to share data between your tasks. Allows you to share a small amount of data between then.
+The simple way to do that is by simple returning a value from a python operator function.
 
 ## 3.12 - Ops... We got a failure
