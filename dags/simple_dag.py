@@ -20,8 +20,9 @@ def _downloading_data(**kwargs):
     return 42
 
 
-def _checking_data():
-    print('checking data')
+def _checking_data(ti):
+    my_xcom = ti.xcom_pull(key='return value', task_ids=['downloading_data'])
+    print(my_xcom)
 
 
 with DAG(dag_id='simple_dag', default_args=default_args, start_date=days_ago(2),
