@@ -325,7 +325,13 @@ You can also changes the time that takes to check by changing the `poke_interval
 
 ## 3.9 - Executing Bash Commands
 
+Bash operator is really simple, just need the **task_id** and the **bash_command** parameters.
+
 ## 3.10 - Define the path!
+
+To define depedencies you can use two methods:
+**- set_upstream** and;
+**- set_downstreaM**.
 
 ## 3.11 - Exchanging Data
 

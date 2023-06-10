@@ -2,6 +2,7 @@ from airflow import DAG
 from airflow.operators.dummy import DummyOperator
 from airflow.operators.python import PythonOperator
 from airflow.sensors.filesystem import FileSensor
+from airflow.operators.bash import BashOperator
 from datetime import datetime, timedelta
 from airflow.utils.dates import days_ago
 
@@ -34,7 +35,10 @@ with DAG(dag_id='simple_dag', default_args=default_args, start_date=days_ago(5),
         poke_interval=5
     )
 
-    testing_task = PythonOperator(
-        task_id='testing_task',
-        python_callable=lambda: print('testing task')
+    processing_data = BashOperator(
+        task_id='processing_data',
+        bash_command='exit 0'
     )
+
+    downloading_data.set_downstream(waiting_data)
+    waiting_data.set_downstream(processing_data)
