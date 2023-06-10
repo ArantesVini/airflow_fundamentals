@@ -374,3 +374,25 @@ We also can push xcom values by acessing the `ti` in the function we will share 
 Airflow is not a processing framework!
 
 ## 3.12 - Ops... We got a failure
+
+After a error, the tasks will wait the `retry_delay`, then retry the amount of times specified in the `retry`, in the default_args of the DAG or in the task specified ones.
+If in the UI you click in **clear** after fix the error in the graph view the task will retry.
+
+But if we got multiple DAGruns with multiple fields is better search specific for tasks marked to retry into list of task instance. You can also set a filter to dag_id to see specific dag marked to retry, after that, fix the issue, select the tasks, and clear, by this **you will retry all tasks at the same time**.
+Always try to be specific whe na task have a failure, just retry the task, not all the DAGrun.
+
+If you want to get alerted whe na task or a dag fails, you can use two paramters:
+`email_on_failure` and `email_on_retry`. To do that you must specifcy a email with the param `email` and also configure the **SMTP** sever or you won't be able to send any email.
+
+Let's say you want to execute something if a taks fails:
+You can use the paramet `on_failure_callback` to execute something
+
+# The Executor Kingdom
+
+## 4.1 - The Default Executor
+
+## 4.2 - Concurrency, The parameters you must know!
+
+## 4.3 - Start Scaling Apache Airflow
+
+## 4.4 - Scaling to the Infinity!
