@@ -391,8 +391,31 @@ You can use the paramet `on_failure_callback` to execute something
 
 ## 4.1 - The Default Executor
 
+The **Sequential executor** is the default executor when you installed Airflow.
+if we got like `t_1 >> [t_2, t_3] >> t_4`, with the sequential executor you can execute your tasks one after another, sequential, t*1 will run, then either t_2 or t_3 will get triggered, after both completed, finally t_4 is triggered. **You can't execut multiple tasks at the same time with the sequential executor**.
+If you wan't to debug your tasks or do some experiments, the sequential executor \_might be pretty useful*.
+Otherwise you basically never use it, because that executor it is quite **limited**.
+
 ## 4.2 - Concurrency, The parameters you must know!
+
+There are a few aprameters you must know about that:
+
+**Parallelism**: The maximum number of tasks you can execute at the same time in your _entire_ airflow instance, the dault value is **32**;
+
+**DAG_concurrency** the number if taks of a given DAG that can be executed in parallel across all the DAGruns. The default is **16**;
+
+**max_active_runs_per_dag** The number of DAGruns that can run at the same time for a given DAG. The default is also **16**.
 
 ## 4.3 - Start Scaling Apache Airflow
 
+To run in production, you may want to execute more than on taks per time, which executor should you try first?
+
+**The Local Executor**
+
+Allow you to execute multiple tasks at the same time in your Airflow instance as long as you have **only yone machine**, just configure your db for postgres, as example, and change parameter executor to local executor and you are ready to start scaling in your own machine.
+Yes, there are the limitation of the local executor in the Russel says you have on your single machine, unless you have a **quantic** machine you won't be able to run as many tasks as you want. At this point you will need another executor.
+
 ## 4.4 - Scaling to the Infinity!
+
+**Celery executor** yo run task into a celery cluster (a distributed task queue to distribute your tasks into multiple machines).
+You can have webserver and shcedule running in one node, postgress as DB running into another one, and in addition of the three core components, you also have the queue, with **celery workers** on separated machines, once you push a task, the task is pushed by the scheduler into the queue and then one of the workers will pusk the task inside the worker / machine. If you have more tasks to execute, you add another machine, that will be another worker, to execute more tasks in parallel.
