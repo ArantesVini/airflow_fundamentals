@@ -11,6 +11,9 @@ from airflow.models.baseoperator import chain, cross_downstream
 default_args = {
     'retry': 5,
     'retry_delay': timedelta(minutes=5),
+    'email_on_failure': True,
+    'email_on_retry': True,
+    'email': 'abc@dfg.com'
 }
 
 
@@ -23,6 +26,11 @@ def _downloading_data(**kwargs):
 def _checking_data(ti):
     my_xcom = ti.xcom_pull(key='return value', task_ids=['downloading_data'])
     print(my_xcom)
+
+
+def _failure(context):
+    print('I am a failure handler on callback')
+    print(context)
 
 
 with DAG(dag_id='simple_dag', default_args=default_args, start_date=days_ago(2),
@@ -49,7 +57,8 @@ with DAG(dag_id='simple_dag', default_args=default_args, start_date=days_ago(2),
 
     processing_data = BashOperator(
         task_id='processing_data',
-        bash_command='exit 0'
+        bash_command='exit 0',
+        on_failure_callback=_failure
     )
 
     # downloading_data.set_downstream(waiting_data)
