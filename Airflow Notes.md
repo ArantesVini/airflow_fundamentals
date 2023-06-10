@@ -362,7 +362,15 @@ If you try to create a cross dependecy with bitshift operator, you will got the 
 
 ## 3.11 - Exchanging Data
 
+_xcom stands for cross communication_
+
 **XComs** is the way to share data between your tasks. Allows you to share a small amount of data between then.
 The simple way to do that is by simple returning a value from a python operator function.
+To fetch this value you must acess the `ti` value in the other function, than call the method `ti.xcom_pull(key=, task_id=[''])`
+
+We also can push xcom values by acessing the `ti` in the function we will share the data, and them use `ti.xcom_push(key='', value=)`
+
+**Be aware**: the XCom is store into the database of Airflow, so they are limitied on sie, based on your used databse. **Don't process data (like terabytes of data) between your tasks using XComs**.
+Airflow is not a processing framework!
 
 ## 3.12 - Ops... We got a failure
